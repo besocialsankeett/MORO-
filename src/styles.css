@@ -1,0 +1,553 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────
+   MORO design tokens. Everything visual reads from this block,
+   so a restyle is a matter of editing it (and src/brand.ts).
+
+   Art direction: quiet and tailored. Pale stone, near-black ink,
+   and one accent — oxblood, the colour of barber-chair leather —
+   kept to small moments (a chosen time, a focused field).
+   Hard edges everywhere; the only curves are mirrors.
+   ─────────────────────────────────────────────────────────── */
+@theme {
+  /* Type: a fashion didone for a few large lines, a quiet sans for everything else. */
+  --font-serif: "Bodoni Moda", "Didot", "Bodoni 72", "Times New Roman", serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Labels and figures use the interface face; there is no third family. */
+  --font-mono: "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Surfaces */
+  --color-paper: #eeece8; /* stone */
+  --color-card: #f6f5f2;
+  --color-sand: #e2dfd9; /* quiet fills, skeletons */
+  --color-ink: #161514;
+  --color-ink-2: #45423e;
+  --color-mute: #69655f;
+  --color-line: #cdc9c1;
+  --color-line-2: #dedbd4;
+
+  /* Brand accent — oxblood. Use sparingly. */
+  --color-accent: #5a1a1f;
+  --color-accent-deep: #43121a;
+  --color-accent-tint: #ecdddb;
+  --color-glint: #d9cfbf; /* the highlight on dark surfaces: bone, not colour */
+
+  /* Semantic */
+  --color-ok: #2f5d4a;
+  --color-ok-tint: #dbe5de;
+  --color-warn: #7a5a12;
+  --color-warn-tint: #efe6cc;
+  --color-bad: #b3301f;
+  --color-bad-tint: #f3dcd6;
+
+  /* Radii: near-square. Round shapes are reserved for mirrors. */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+
+  /* Elevation */
+  --shadow-soft: 0 1px 2px rgb(22 21 20 / 0.05), 0 10px 28px -14px rgb(22 21 20 / 0.16);
+  --shadow-lift: 0 2px 4px rgb(22 21 20 / 0.06), 0 28px 56px -22px rgb(22 21 20 / 0.32);
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+  button,
+  [role="button"],
+  a,
+  select {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ── Type scale ─────────────────────────────────────────────
+   Display: Bodoni Moda, regular weight, sentence case, set tight.
+   Its optical-size axis thins the hairlines as the type grows.
+   Emphasis is italic, never colour. Interface: Geist. */
+@utility font-display {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+@utility t-display-1 {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(3rem, 7.2vw, 7.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.032em;
+  & em {
+    font-style: italic;
+  }
+}
+@utility t-display-2 {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
+  & em {
+    font-style: italic;
+  }
+}
+@utility t-display-3 {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 2.7vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  & em {
+    font-style: italic;
+  }
+}
+@utility t-title {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+}
+@utility t-lead {
+  font-size: clamp(1.0625rem, 1.25vw, 1.1875rem);
+  line-height: 1.5;
+  color: var(--color-ink-2);
+}
+@utility t-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-mute);
+}
+@utility t-meta {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--color-mute);
+}
+
+/* ── Layout helpers ─────────────────────────────────────── */
+@utility shell {
+  width: 100%;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2.5rem;
+  }
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+/* The one curved form in the system: a mirror — flat base, full round head. */
+@utility arch {
+  border-radius: 999px 999px 0 0;
+}
+@utility field {
+  width: 100%;
+  height: 3rem;
+  padding-inline: 0.9rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+  &::placeholder {
+    color: var(--color-mute);
+  }
+  &:hover {
+    border-color: var(--color-mute);
+  }
+  &:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgb(90 26 31 / 0.14);
+  }
+}
+
+/* ── Motion ─────────────────────────────────────────────────
+   Entrances are CSS so prerendered pages animate (and stay
+   visible) without waiting for JavaScript. Stagger with --d. */
+@keyframes rise {
+  from {
+    transform: translateY(104%);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@utility anim-rise {
+  animation: rise 0.95s var(--ease-out-soft) both;
+  animation-delay: var(--d, 0s);
+}
+@utility anim-fade-up {
+  animation: fade-up 0.8s var(--ease-out-soft) both;
+  animation-delay: var(--d, 0s);
+}
+@utility anim-fade {
+  animation: fade-in 0.9s ease both;
+  animation-delay: var(--d, 0s);
+}
+/* The loader mark: the arch draws on from the left foot, holds, then draws off over the right. */
+@keyframes arch-draw {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  45%,
+  55% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+.arch-loader path {
+  stroke-dasharray: 1;
+  animation: arch-draw 1.5s cubic-bezier(0.6, 0, 0.2, 1) infinite;
+}
+
+/* While the intro (index.html) still covers the page, hold entrances; they play as it clears. */
+html.intro:not(.intro-open) .anim-rise,
+html.intro:not(.intro-open) .anim-fade-up,
+html.intro:not(.intro-open) .anim-fade {
+  animation-play-state: paused;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@utility skeleton {
+  background: linear-gradient(90deg, var(--color-sand) 0%, var(--color-line-2) 40%, var(--color-sand) 80%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+/* Photographs share one muted grade so mixed sources read as a set. */
+@utility graded {
+  filter: saturate(0.78) contrast(1.04);
+}
+
+/* ── The hero mirror (components/Triptych.tsx) ────────────
+   A three-panel vanity mirror built from elements and 3D transforms. The component's animation loop
+   drives these variables; the values here are the mirror standing at rest, which is what ships in the HTML.
+     --ry / --rx  how far the whole mirror has turned toward the pointer
+     --wing       a wing's angle from flat
+     --lift       0 → 1 as a pane becomes the active one
+     --shade      how far a pane is dimmed while another is active
+     --sx / --sy  how far the reflection has slid inside the glass
+     --gl         where the streak of light sits on the glass and the frame                              */
+.tri-scene {
+  --pad: clamp(16px, 2.6vw, 34px);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: var(--pad);
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
+}
+.tri-rig {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+}
+.tri-leaf {
+  position: relative;
+  display: block;
+  flex: none;
+  height: 84%;
+  aspect-ratio: 155 / 390;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+/* The wings hang from the centre pane's edges and stand turned toward you. */
+.tri-left {
+  transform-origin: 100% 50%;
+  transform: rotateY(var(--wing, 30deg));
+}
+.tri-right {
+  transform-origin: 0 50%;
+  transform: rotateY(calc(var(--wing, 30deg) * -1));
+}
+.tri-centre {
+  height: 95%;
+  aspect-ratio: 230 / 440;
+  transform: translateZ(calc(var(--lift, 0) * 26px));
+}
+
+/* The frame and glass are shared with the single mirrors elsewhere on the page (Mirror in components/ui.tsx);
+   their rules follow this block, so this one is written to outrank them. */
+.tri-leaf > .tri-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* Dims the whole pane, frame included, while another is active. */
+.tri-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #0b0a0a;
+  opacity: var(--shade, 0);
+  pointer-events: none;
+}
+/* The reflection. It is larger than the glass so it has room to slide as the mirror turns. */
+.tri-glass img {
+  position: absolute;
+  left: -12%;
+  top: -12%;
+  width: 124%;
+  height: 124%;
+  max-width: none;
+  object-fit: cover;
+  filter: saturate(0.8) contrast(1.05);
+  transform: translate(var(--sx, 0%), var(--sy, 0%));
+}
+
+/* ── Mirror frame and glass ───────────────────────────────
+   The frame: a slim band of blackened bronze. Its highlights sit at --gl and slide along it as that changes.
+   --frame is the band's width.                                                                          */
+.mirror-frame {
+  --frame: clamp(3px, 0.42vw, 6px);
+  position: relative;
+  display: block;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(100deg, #14120f 0%, #3d372e 16%, #191713 30%, #7a7163 47%, #a59b8a 50%, #6a6255 53%, #1c1a15 68%, #453f35 84%, #13110e 100%) var(--gl, 50%) 0 / 280% 100%;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.09),
+    0 0 0 0.5px rgb(11 10 10 / 0.7),
+    0 22px 44px -22px rgb(22 21 20 / 0.42);
+}
+/* On a dark ground the band needs a faint lit edge to stand off it. */
+.mirror-frame.on-dark {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.12),
+    0 0 0 0.5px rgb(217 207 191 / 0.28),
+    0 30px 60px -30px rgb(0 0 0 / 0.8);
+}
+.mirror-glass {
+  position: absolute;
+  inset: var(--frame);
+  display: block;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
+  background: #191715;
+}
+/* The room's light on the glass: a wash from above, a little weight at the foot, and one streak that travels. */
+.mirror-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(104deg, rgb(255 255 255 / 0) 39%, rgb(255 255 255 / 0.17) 46%, rgb(255 255 255 / 0.04) 50.5%, rgb(255 255 255 / 0.1) 53%, rgb(255 255 255 / 0) 61%) var(--gl, 50%) 0 / 300% 100% no-repeat,
+    linear-gradient(to bottom, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0) 32%, rgb(11 10 10 / 0) 68%, rgb(11 10 10 / 0.18));
+}
+/* The bevelled edge of the glass, and the frame's shadow falling onto it. */
+.mirror-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.4),
+    inset 0 0 0 5px rgb(255 255 255 / 0.08),
+    inset 0 0 0 6px rgb(11 10 10 / 0.24),
+    inset 0 12px 26px -10px rgb(11 10 10 / 0.55),
+    inset 0 0 70px rgb(11 10 10 / 0.16);
+}
+/* A mirror on its own: the light eases after the pointer instead of being driven every frame. */
+.mirror-solo,
+.mirror-solo > .mirror-glass::before {
+  transition: background-position 0.9s var(--ease-out-soft);
+}
+
+/* A wing's outer side: the thickness of the slab, seen as the wing turns toward you. */
+.tri-edge {
+  position: absolute;
+  top: 19.9%;
+  bottom: 0;
+  width: 7px;
+  background: linear-gradient(to right, #0d0c0a, #413b32 45%, #15130f);
+}
+.tri-left .tri-edge {
+  left: 0;
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+}
+.tri-right .tri-edge {
+  right: 0;
+  transform-origin: 100% 50%;
+  transform: rotateY(-90deg);
+}
+.tri-hinge {
+  position: absolute;
+  width: 6px;
+  height: 8%;
+  border-radius: 2px;
+  background: linear-gradient(to right, #0f0e0c, #6b6254 42%, #a1978a 50%, #2a2620 64%, #12100d);
+  box-shadow: 0 1px 2px rgb(11 10 10 / 0.5);
+  transform: translateZ(3px);
+}
+/* Where each pane meets the surface it stands on: a shadow lying on the floor in front of it. */
+.tri-contact {
+  position: absolute;
+  left: -3%;
+  right: -3%;
+  top: 100%;
+  height: 120px;
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+  background: linear-gradient(to bottom, rgb(11 10 10 / 0.55), rgb(11 10 10 / 0.18) 20%, rgb(11 10 10 / 0) 72%);
+  filter: blur(5px);
+  opacity: calc(1 - var(--shade, 0));
+  pointer-events: none;
+}
+/* The soft pool of shadow under the whole mirror. */
+.tri-ground {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 0;
+  height: calc(var(--pad) * 2);
+  background: radial-gradient(closest-side, rgb(22 21 20 / 0.3), rgb(22 21 20 / 0.1) 55%, rgb(22 21 20 / 0));
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ── Leaflet, restyled to sit inside the brand ──────────── */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-sand);
+  z-index: 0;
+}
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  background: rgb(246 245 242 / 0.85) !important;
+}
+.leaflet-bar {
+  border: 1px solid var(--color-line) !important;
+  box-shadow: var(--shadow-soft) !important;
+  border-radius: 2px !important;
+  overflow: hidden;
+}
+.leaflet-bar a {
+  color: var(--color-ink) !important;
+  background: var(--color-card) !important;
+  border-bottom-color: var(--color-line-2) !important;
+}
+/* OpenStreetMap tiles, toned to a warm monochrome so pins and photos lead. */
+.leaflet-tile-pane {
+  filter: grayscale(1) sepia(0.12) contrast(0.92) brightness(1.05);
+}
+.moro-pin {
+  width: max-content;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  height: 28px;
+  padding: 0 9px;
+  white-space: nowrap;
+  border-radius: 2px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lift);
+  transition:
+    transform 0.2s var(--ease-out-soft),
+    background 0.2s;
+}
+.moro-pin:hover,
+.moro-pin.is-active {
+  background: var(--color-accent);
+  transform: scale(1.08);
+}
+.moro-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  border: 4px solid var(--color-paper);
+  box-shadow:
+    0 0 0 1px var(--color-ink),
+    var(--shadow-lift);
+}
